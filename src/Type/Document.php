@@ -1,0 +1,19 @@
+<?php
+declare(strict_types=1);
+
+namespace Telix\Type;
+
+final readonly class Document
+{
+    public function __construct(
+        public string     $fileId,
+        public string     $fileUniqueId,
+        public ?PhotoSize $thumbnail    = null,
+        public ?string    $fileName     = null,
+        public ?string    $mimeType     = null,
+        public ?int       $fileSize     = null,
+        public array      $raw          = []
+    )
+    {
+    }
+}

@@ -1,0 +1,16 @@
+<?php
+declare(strict_types=1);
+
+namespace Telix\Type;
+
+final readonly class BotCommandScopeChatMember
+{
+    public function __construct(
+        public string     $type,
+        public int|string $chatId,
+        public int        $userId,
+        public array      $raw    = []
+    )
+    {
+    }
+}
