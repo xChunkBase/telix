@@ -84,6 +84,13 @@ final class Paginator
         }
     }
 
+    public function pageCallback(string $token, int $page): string
+    {
+        $this->guardCallbackSize($token, $page);
+
+        return $this->callback($token, $page);
+    }
+
     private function callback(string $token, int $page): string
     {
         if ($token === '') {
@@ -93,13 +100,13 @@ final class Paginator
         return self::CALLBACK_PREFIX . ":{$this->id}:{$token}:{$page}";
     }
 
-    private function guardCallbackSize(string $token, int $totalPages): void
+    private function guardCallbackSize(string $token, int $page): void
     {
         if ($token !== '' && str_contains($token, ':')) {
             throw new \InvalidArgumentException('A pagination token may not contain ":" — it is the callback-data delimiter.');
         }
 
-        $bytes = strlen($this->callback($token, $totalPages));
+        $bytes = strlen($this->callback($token, $page));
 
         if ($bytes <= self::MAX_CALLBACK_BYTES) {
             return;
