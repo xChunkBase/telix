@@ -189,6 +189,13 @@ final class Context
         return $this->requireState()->data($this->requireUserId());
     }
 
+    public function step(): ?string
+    {
+        $userId = $this->from()?->id;
+
+        return $userId !== null && $this->state !== null ? $this->state->step($userId) : null;
+    }
+
     public function inConversation(): bool
     {
         $userId = $this->from()?->id;

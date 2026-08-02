@@ -86,7 +86,12 @@ final readonly class Update
 
     public function from(): ?User
     {
-        return $this->anyMessage()?->from
+        return $this->message?->from
+            ?? $this->editedMessage?->from
+            ?? $this->channelPost?->from
+            ?? $this->editedChannelPost?->from
+            ?? $this->businessMessage?->from
+            ?? $this->editedBusinessMessage?->from
             ?? $this->callbackQuery?->from
             ?? $this->inlineQuery?->from
             ?? $this->chosenInlineResult?->from
