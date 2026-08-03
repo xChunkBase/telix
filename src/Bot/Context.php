@@ -25,7 +25,7 @@ final class Context
         public readonly Update       $update,
         private readonly BotApi      $api,
         private readonly ?Translator $translator       = null,
-        private readonly ?string     $locale           = null,
+        private ?string              $locale           = null,
         private readonly ?ParseMode  $defaultParseMode = null,
         private readonly ?StateStore $state            = null,
         private readonly ?Memory     $memory           = null,
@@ -167,6 +167,13 @@ final class Context
     public function locale(): ?string
     {
         return $this->locale;
+    }
+
+    public function setLocale(?string $locale): self
+    {
+        $this->locale = $locale;
+
+        return $this;
     }
 
     public function enter(string $step, array $data = [], ?int $ttl = null): void
