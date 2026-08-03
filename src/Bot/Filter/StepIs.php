@@ -47,7 +47,7 @@ final class StepIs extends Filter
         }
 
         foreach ($this->names as $name) {
-            $ctx->setParam($name, $matches[$name]);
+            $ctx->setParam($name, $matches[$name] ?? null);
         }
 
         $ctx->setParam('state', $this->store->data($userId));

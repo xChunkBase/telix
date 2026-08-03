@@ -44,7 +44,7 @@ final class CallbackData extends Filter
         }
 
         foreach ($this->names as $name) {
-            $ctx->setParam($name, $matches[$name]);
+            $ctx->setParam($name, $matches[$name] ?? null);
         }
 
         return true;
