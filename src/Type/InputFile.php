@@ -27,6 +27,11 @@ final class InputFile
         return new self(null, $contents, $filename);
     }
 
+    public function path(): ?string
+    {
+        return $this->path;
+    }
+
     public function contents(): string
     {
         if ($this->contents !== null) {
