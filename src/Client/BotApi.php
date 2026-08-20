@@ -6,7 +6,7 @@ namespace Telix\Client;
 use Telix\Type\File;
 use Telix\Method\RawMethod;
 use Telix\Method\MethodInterface;
-use Telix\Client\Transport\Psr18Transport;
+use Telix\Client\Transport\FileTransportInterface;
 
 final class BotApi
 {
@@ -196,10 +196,20 @@ final class BotApi
     use \Telix\Method\VerifyChat;
     use \Telix\Method\VerifyUser;
 
+    private ?\Closure $onProgress = null;
+
     public function __construct(
         private readonly ClientInterface $client
     )
     {
+    }
+
+    public function withProgress(?callable $onProgress): self
+    {
+        $clone             = clone $this;
+        $clone->onProgress = $onProgress === null ? null : $onProgress(...);
+
+        return $clone;
     }
 
     public function __call(string $method, array $arguments): mixed
@@ -219,17 +229,34 @@ final class BotApi
 
     public function call(MethodInterface $method): mixed
     {
-        return $this->client->call($method);
+        return $this->client->call($method, $this->onProgress);
     }
 
     public function fileUrl(File|string $file): ?string
     {
         $path = $file instanceof File ? $file->filePath : $file;
 
-        if ($path === null || !$this->client instanceof Psr18Transport) {
+        if ($path === null || !$this->client instanceof FileTransportInterface) {
             return null;
         }
 
         return $this->client->fileUrl($path);
+    }
+
+    public function downloadFile(File|string $file, string $dest, ?callable $onProgress = null): int
+    {
+        if (!$this->client instanceof FileTransportInterface) {
+            throw new \LogicException('The active transport cannot download files. Use Telix::api(streaming: true).');
+        }
+
+        if (\is_string($file)) {
+            $file = $this->getFile($file);
+        } elseif ($file->filePath === null) {
+            $file = $this->getFile($file->fileId);
+        }
+
+        $path = $file->filePath ?? throw new \RuntimeException('File has no file_path to download.');
+
+        return $this->client->download($path, $dest, $onProgress);
     }
 }
