@@ -25,11 +25,8 @@ full typed Bot API surface.
 ## Install
 
 ```bash
-composer require telix/telix guzzlehttp/guzzle
+composer require telix/telix
 ```
-
-Telix auto-detects any PSR-18 HTTP client; Guzzle is the easiest. If you already have a
-PSR-18 client + PSR-17 factories, you can pass your own instead and drop Guzzle.
 
 ## Quick start
 
