@@ -7,5 +7,5 @@ use Telix\Method\MethodInterface;
 
 interface ClientInterface
 {
-    public function call(MethodInterface $method): mixed;
+    public function call(MethodInterface $method, ?callable $onProgress = null): mixed;
 }
